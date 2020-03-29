@@ -1,0 +1,13 @@
+#n41_Recipes_widget_news {
+	margin: 0;
+	list-style: none;
+}
+
+#n41_Recipes_widget_news a {
+	font-weight: 700;
+	text-decoration: none;
+}
+
+#n41_Recipes_widget_news a:hover {
+	text-decoration: underline;
+}
