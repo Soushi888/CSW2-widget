@@ -121,9 +121,9 @@ class N41_Recipes_Widget_News extends WP_Widget {
 		
 		// DEBUG N41
 		$nfile = fopen(ABSPATH."n41-debug.log", "a");
-		$value =date("Y-m-d H:i:s ").__METHOD__." : old_instance ".print_r($old_instance, true). "\n";
+		$value = date("Y-m-d H:i:s ").__METHOD__." : old_instance ".print_r($old_instance, true). "\n";
 		fwrite($nfile, $value);
-		$value =date("Y-m-d H:i:s ").__METHOD__." : new_instance ".print_r($new_instance, true). "\n";
+		$value = date("Y-m-d H:i:s ").__METHOD__." : new_instance ".print_r($new_instance, true). "\n";
 		fwrite($nfile, $value);
 		fclose($nfile);
 		// FIN DEBUG N41
