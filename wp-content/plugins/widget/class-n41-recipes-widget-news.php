@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Widget API: classe N41_Recipes_Widget_News
  *
@@ -11,18 +12,20 @@
  *
  * @see WP_Widget
  */
-class N41_Recipes_Widget_News extends WP_Widget {
+class N41_Recipes_Widget_News extends WP_Widget
+{
 
 	/**
 	 * Constructeur d'une nouvelle instance de cette classe 
 	 *
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		$widget_ops = array(
 			'classname'   => 'n41_recipes_widget_news',
 			'description' => 'Affiche le nom de la dernière recette enregistrée.'
 		);
-		parent::__construct( 'n41_recipes_widget_news', 'N41 Recipes - Dernière recette', $widget_ops );
+		parent::__construct('n41_recipes_widget_news', 'N41 Recipes - Dernière recette', $widget_ops);
 	}
 
 	/**
@@ -32,16 +35,17 @@ class N41_Recipes_Widget_News extends WP_Widget {
 	 *                        'before_widget', and 'after_widget'
 	 * @param array $instance Settings for the current widget instance
 	 */
-	public function widget( $args, $instance ) {
-		$title = !empty( $instance['title'] ) ? $instance['title'] : __('Last recipe');
+	public function widget($args, $instance)
+	{
+		$title = !empty($instance['title']) ? $instance['title'] : __('Last recipe');
 
 		/** Ce crochet de filtres est documenté dans wp-includes/widgets/class-wp-widget-pages.php */
-		$title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
+		$title = apply_filters('widget_title', $title, $instance, $this->id_base);
 
 		// le tableau args contient les codes html de mise en forme
 		// enregistrés par la fonction WP register_sidebar dans le thème courant 
 		echo $args['before_widget'];
-		if ( $title ) {
+		if ($title) {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 
@@ -56,10 +60,11 @@ class N41_Recipes_Widget_News extends WP_Widget {
 	 *
 	 * @param none
 	 */
-	public function get_last_recipe() {
+	public function get_last_recipe()
+	{
 		global $wpdb;
 		// récupération de la dernière recette dans la table recipes
-		$sql = "SELECT * FROM $wpdb->prefix"."recipes ORDER BY id DESC LIMIT 1";
+		$sql = "SELECT * FROM $wpdb->prefix" . "recipes ORDER BY id DESC LIMIT 1";
 
 		$recipe = $wpdb->get_row($sql);
 		if ($recipe  !== null) :
@@ -69,44 +74,41 @@ class N41_Recipes_Widget_News extends WP_Widget {
 
 			// feuille de style CSS pour être homogène avec le thème Twenty Twenty
 			wp_register_style("n41_recipes_widget_news", plugins_url('css/n41-Recipes-widget-news.css', __FILE__));
-			wp_enqueue_style("n41_recipes_widget_news");	
-	?>
+			wp_enqueue_style("n41_recipes_widget_news");
+?>
 
 			<ul id="n41_Recipes_widget_news">
-			  <li>
-			    <a href="<?php echo $single_permalink.'?page='.stripslashes($recipe->title).'&id='.$recipe->id?>">
-					<?php echo stripslashes($recipe->title) ?>
-				</a>
-			  </li>#
+				<li>
+					<a href="<?php echo $single_permalink . '?page=' . stripslashes($recipe->title) . '&id=' . $recipe->id ?>">
+						<?php echo stripslashes($recipe->title) ?>
+					</a>
+				</li>#
 			</ul>
-	<?php
+		<?php
 		else :
-	?>
+		?>
 			<p>Aucune recette enregistrée.</p>
-	<?php
+		<?php
 		endif;
 	}
-	
+
 	/**
 	 * Affichage du formulaire de configuration du widget
 	 *
 	 * @param array $instance Current settings
 	 */
-	public function form( $instance ) {
+	public function form($instance)
+	{
 		// ici un seul paramètre de configuration: le titre du widget
 		// qui est affiché dans la zone du widget sur les pages du site
-		$title = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+		$title = isset($instance['title']) ? esc_attr($instance['title']) : '';
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?> 
-				<input	class="widefat"
-						id="<?php echo $this->get_field_id('title'); ?>"
-						name="<?php echo $this->get_field_name('title'); ?>"
-						type="text"
-						value="<?php echo $title; ?>">
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?>
+				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>">
 			</label>
 		</p>
-		<?php
+<?php
 	}
 
 	/**
@@ -117,20 +119,20 @@ class N41_Recipes_Widget_News extends WP_Widget {
 	 * @param array $old_instance Old settings for this instance
 	 * @return array Updated settings
 	 */
-	public function update( $new_instance, $old_instance ) {
-		
+	public function update($new_instance, $old_instance)
+	{
+
 		// DEBUG N41
-		$nfile = fopen(ABSPATH."n41-debug.log", "a");
-		$value = date("Y-m-d H:i:s ").__METHOD__." : old_instance ".print_r($old_instance, true). "\n";
+		$nfile = fopen(ABSPATH . "n41-debug.log", "a");
+		$value = date("Y-m-d H:i:s ") . __METHOD__ . " : old_instance " . print_r($old_instance, true) . "\n";
 		fwrite($nfile, $value);
-		$value = date("Y-m-d H:i:s ").__METHOD__." : new_instance ".print_r($new_instance, true). "\n";
+		$value = date("Y-m-d H:i:s ") . __METHOD__ . " : new_instance " . print_r($new_instance, true) . "\n";
 		fwrite($nfile, $value);
 		fclose($nfile);
 		// FIN DEBUG N41
-		
+
 		$instance = $old_instance;
-		$instance['title'] = sanitize_text_field( $new_instance['title'] );
+		$instance['title'] = sanitize_text_field($new_instance['title']);
 		return $instance;
 	}
-
 }
