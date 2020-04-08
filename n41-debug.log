@@ -1,0 +1,19 @@
+2020-04-08 05:39:29 N41_Recipes_Widget_News::update : old_instance Array
+(
+)
+
+2020-04-08 05:39:29 N41_Recipes_Widget_News::update : new_instance Array
+(
+    [title] => 
+)
+
+2020-04-08 05:39:42 N41_Recipes_Widget_News::update : old_instance Array
+(
+    [title] => 
+)
+
+2020-04-08 05:39:42 N41_Recipes_Widget_News::update : new_instance Array
+(
+    [title] => Recettes de Jean Jean
+)
+
