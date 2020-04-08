@@ -31,7 +31,8 @@ class N41_Recipes_Widget_News extends WP_Widget
 	/**
 	 * Affiche le contenu de l'instance courante du widget
 	 *
-	 * @param array $args Display arguments including 'before_title', 'after_title', 'before_widget', and 'after_widget'
+	 * @param array $args     Display arguments including 'before_title', 'after_title',
+	 *                        'before_widget', and 'after_widget'
 	 * @param array $instance Settings for the current widget instance
 	 */
 	public function widget($args, $instance)
@@ -59,30 +60,29 @@ class N41_Recipes_Widget_News extends WP_Widget
 	 *
 	 * @param none
 	 */
-	public function get_last_recipe($nbr)
+	public function get_last_recipe()
 	{
 		global $wpdb;
 		// récupération de la dernière recette dans la table recipes
-		$sql = "SELECT * FROM {$wpdb->prefix}recipes ORDER BY id DESC LIMIT {$nbr}";
+		$sql = "SELECT * FROM $wpdb->prefix" . "recipes ORDER BY id DESC LIMIT 1";
 
-		$recipes = $wpdb->get_results($sql);
+		$recipe = $wpdb->get_row($sql);
+		if ($recipe  !== null) :
+			// récupération du lien vers la page générique d'affichage d'une recette
+			$postmeta = $wpdb->get_row("SELECT * FROM $wpdb->postmeta WHERE meta_key = 'n41_recipes' AND meta_value = 'single'");
+			$single_permalink = get_permalink($postmeta->post_id);
 
-		// feuille de style CSS pour être homogène avec le thème Twenty Twenty
-		wp_register_style("n41_recipes_widget_news", plugins_url('css/n41-Recipes-widget-news.css', __FILE__));
-		wp_enqueue_style("n41_recipes_widget_news");
+			// feuille de style CSS pour être homogène avec le thème Twenty Twenty
+			wp_register_style("n41_recipes_widget_news", plugins_url('css/n41-Recipes-widget-news.css', __FILE__));
+			wp_enqueue_style("n41_recipes_widget_news");
+?>
 
-		if ($recipes  !== null) : ?>
 			<ul id="n41_Recipes_widget_news">
-				<?php foreach ($recipes as $recipe) :
-					// récupération du lien vers la page générique d'affichage d'une recette pour chaque recette
-					$postmeta = $wpdb->get_row("SELECT * FROM $wpdb->postmeta WHERE meta_key = 'n41_recipes' AND meta_value = 'single'");
-					$single_permalink = get_permalink($postmeta->post_id); ?>
-					<li>
-						<a href="<?php echo $single_permalink[] . '?page=' . stripslashes($recipe->title) . '&id=' . $recipe->id ?>">
-							<?php echo stripslashes($recipe->title) ?>
-						</a>
-					</li>
-				<?php endforeach; ?>
+				<li>
+					<a href="<?php echo $single_permalink . '?page=' . stripslashes($recipe->title) . '&id=' . $recipe->id ?>">
+						<?php echo stripslashes($recipe->title) ?>
+					</a>
+				</li>#
 			</ul>
 		<?php
 		else :
@@ -104,11 +104,8 @@ class N41_Recipes_Widget_News extends WP_Widget
 		$title = isset($instance['title']) ? esc_attr($instance['title']) : '';
 		?>
 		<p>
-			<label for="<?= $this->get_field_id('title'); ?>"><?php _e('Title:'); ?>
-				<input class="widefat" id="<?= $this->get_field_id('title'); ?>" name="<?= $this->get_field_name('title'); ?>" type="text" value="<?= $title; ?>">
-			</label>
-			<label for="<?= $this->get_field_id('nombreAffiche'); ?>"><?= _e('nombreAffiche:'); ?>
-				<input type="number" min=1 max=5 value=3 name="<?= $this->get_field_name('nombreAffiche'); ?>" id="<?= $this->get_field_name('nombreAffiche'); ?>">
+			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?>
+				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>">
 			</label>
 		</p>
 <?php
