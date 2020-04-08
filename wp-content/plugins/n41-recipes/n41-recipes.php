@@ -96,10 +96,10 @@ function n41_recipes_default_settings() {
 	add_option(
 		'n41_recipes_settings',
 		array(
-			view_ingredients  => 'yes',
-			view_instructions => 'yes',
-			view_prep_time    => 'yes',
-			view_cook_time    => 'yes'
+			"view_ingredients"  => 'yes',
+			"view_instructions" => 'yes',
+			"view_prep_time"    => 'yes',
+			"view_cook_time"    => 'yes'
 		)	
 	);
 }
